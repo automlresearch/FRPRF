@@ -19,12 +19,32 @@ def create_exp_dir(path, scripts_to_save=None):
             shutil.copyfile(script, dst_file)
 
 
-def save_checkpoint(state, is_best, save):
-    filename = os.path.join(save, 'checkpoint.pth.tar')
-    t.save(state, filename)
-    if is_best:
-        best_filename = os.path.join(save, 'model_best.pth.tar')
+def save_checkpoint(model_state_dict, is_max_valid_acc, checkpoint_path,
+                    checkpoint_name='checkpoint.pth.tar',
+                    best_checkpoint_name='model_best.pth.tar'):
+    filename = os.path.join(checkpoint_path, checkpoint_name)
+    t.save(model_state_dict, filename)
+    if is_max_valid_acc:
+        best_filename = os.path.join(checkpoint_path, best_checkpoint_name)
         shutil.copyfile(filename, best_filename)
+
+
+def load_checkpoint(checkpoint_path, checkpoint_name='model_best.pth.tar', load_optimizer=False):
+    """
+    model_state_dict = {
+    'epoch': epoch,
+    'is_max_valid_acc': self.is_max_valid_acc,
+    'valid_acc': valid_acc,
+    'state_dict': state_dict,
+    'optimizer_state_dict': optimizer_state_dict
+    }
+    """
+    print("os.path.join(checkpoint_path, checkpoint_name): ", os.path.join(checkpoint_path, checkpoint_name))
+    model_state_dict = t.load(os.path.join(checkpoint_path, checkpoint_name))
+    if load_optimizer:
+        return model_state_dict['state_dict'], model_state_dict['optimizer_state_dict']
+    else:
+        return model_state_dict['state_dict']
 
 
 class RecordTrainResult(object):
@@ -76,7 +96,6 @@ class RecordTrainResult(object):
             'valid_acc': valid_acc,
             'state_dict': state_dict,
             'optimizer_state_dict': optimizer_state_dict
-            }
+        }
 
         save_checkpoint(model_state_dict, self.is_max_valid_acc, save_path)
-

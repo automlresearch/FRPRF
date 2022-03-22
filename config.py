@@ -9,9 +9,9 @@ class DefaultConfig(object):
     vis_port =8097 # visdom 端口
 
     model = 'LeNet'
-    load_model_path = None  # 加载预训练的模型的路径，为None代表不加载
+    pretrained_weight_path = None  # 加载预训练的模型的路径，为None代表不加载
 
-    checkpoint_path = os.path.join("models/lenet", "checkpoints")
+    checkpoint_path = os.path.join("models/lenet", "checkpoints")  # save path for trained CNN weight
     train_data_root = './data/train/'  # 训练集存放路径
     test_data_root = './data/test1'  # 测试集存放路径
     debug_file = '/tmp/debug'  # if os.path.exists(debug_file): enter ipdb

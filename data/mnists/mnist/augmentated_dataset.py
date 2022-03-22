@@ -48,8 +48,8 @@ class AugmentedData(Dataset):
 
 class AugmentedData_random_choose(Dataset):
 
-    def __init__(self, data_path="./data/mnists/mnist/RotatedMnistWithAngle/val",
-                 target_path="./data/mnists/mnist/RotatedMnistWithAngle/val", img_num=10000
+    def __init__(self, data_path="/home/p/Documents/experiment/RotatedPatternRecognition/FRPRF/data/mnists/mnist/RotatedMnistWithAngle/val",
+                 target_path="/home/p/Documents/experiment/RotatedPatternRecognition/FRPRF/data/mnists/mnist/RotatedMnistWithAngle/val", img_num=10000
                  , augment_time=360, sample_interval=60, suffix=".pt") -> None:
         self.img_id = -1
         self.data = None

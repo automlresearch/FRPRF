@@ -33,8 +33,8 @@ def test(**kwargs):
 
     # configure model
     model = getattr(models, opt.model)().eval()
-    if opt.load_model_path:
-        model.load(opt.load_model_path)
+    if opt.pretrained_weight_path:
+        model.load(opt.pretrained_weight_path)
     model.to(opt.device)
 
     # data
@@ -83,8 +83,8 @@ def train(**kwargs):
 
     # step 2: configure model
     model = getattr(models, opt.model)()
-    if opt.load_model_path:
-        model.load(opt.load_model_path)
+    if opt.pretrained_weight_path:
+        model.load(opt.pretrained_weight_path)
     model.to(opt.device)
     rtr.add_log("param size = %f MB", count_parameters_in_MB(model))
 
@@ -105,7 +105,7 @@ def train(**kwargs):
     # )
     optimizer = t.optim.Adam(model.parameters(), lr=lr)
 
-    # scheduler = t.optim.lr_scheduler.CosineAnnealingLR(optimizer, float(opt.max_epoch))
+    scheduler = t.optim.lr_scheduler.CosineAnnealingLR(optimizer, float(opt.max_epoch))
 
     previous_loss = 1e10
 
@@ -120,6 +120,7 @@ def train(**kwargs):
 
         rtr.add_log('train_acc %f', train_acc)
         rtr.add_log('val_acc %f', val_acc)
+        rtr.save_model_state_dict(val_acc, epoch, model.state_dict, optimizer.state_dict, save_path=opt.checkpoint_path)
 
         vis.plot('train_acc', train_acc)
         vis.plot('val_acc', val_acc)
@@ -128,7 +129,7 @@ def train(**kwargs):
             lr=lr))
 
         # update learning rate, method 1.
-        # scheduler.step()
+        scheduler.step()
         # update learning rate, method 2.
         # if loss_meter.value()[0] > previous_loss:
         #     lr = lr * opt.lr_decay
