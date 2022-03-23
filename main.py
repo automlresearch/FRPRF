@@ -120,7 +120,7 @@ def train(**kwargs):
 
         rtr.add_log('train_acc %f', train_acc)
         rtr.add_log('val_acc %f', val_acc)
-        rtr.save_model_state_dict(val_acc, epoch, model.state_dict, optimizer.state_dict, save_path=opt.checkpoint_path)
+        rtr.save_model_state_dict(val_acc, epoch, model.state_dict(), optimizer.state_dict(), save_path=opt.checkpoint_path)
 
         vis.plot('train_acc', train_acc)
         vis.plot('val_acc', val_acc)

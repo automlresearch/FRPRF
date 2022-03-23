@@ -39,7 +39,6 @@ def load_checkpoint(checkpoint_path, checkpoint_name='model_best.pth.tar', load_
     'optimizer_state_dict': optimizer_state_dict
     }
     """
-    print("os.path.join(checkpoint_path, checkpoint_name): ", os.path.join(checkpoint_path, checkpoint_name))
     model_state_dict = t.load(os.path.join(checkpoint_path, checkpoint_name))
     if load_optimizer:
         return model_state_dict['state_dict'], model_state_dict['optimizer_state_dict']
